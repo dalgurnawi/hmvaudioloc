@@ -30,9 +30,7 @@ blocksize = 10
 samplerate = 44100 # if errors check 48000
 downsample = 10
 
-
 mapping = [c - 1 for c in channels]  # Channel numbers start with 1
-print(mapping)
 q = queue.Queue()
 
 
@@ -92,9 +90,9 @@ try:
     fig.tight_layout(pad=0)
 
     stream = sd.InputStream(
-        device=42,
+        device=device,
         channels=max(channels),
-        samplerate=48000,
+        samplerate=samplerate,
         callback=audio_callback)
 
     ani = FuncAnimation(fig,

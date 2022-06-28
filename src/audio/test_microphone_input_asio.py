@@ -93,8 +93,8 @@ try:
     fig.tight_layout(pad=0)
 
     stream = sd.InputStream(
-        device=27,
-        channels=1,
+        device=device,
+        channels=channels,
         samplerate=samplerate,
         callback=audio_callback,
         extra_settings=asio_in)
