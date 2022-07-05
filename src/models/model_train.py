@@ -1,3 +1,6 @@
+import tensorflow as tf
+import matplotlib.pyplot as plt
+
 from src.models.model_architectures.model_baseline_vanilla import create_baseline_vanilla_model
 from src.models.model_architectures.model_baseline import create_baseline_model
 from src.models.model_architectures.model_baseline_gaussian_noise import create_baseline_gaussian_noise_model
@@ -63,8 +66,40 @@ def compile_model(model_choice="baseline_model", optimizer="adam", loss="sparse_
 
     return model
 
-# history = model.fit(
-#     dataset_train,
-#     epochs=epochs,
-#     validation_data=dataset_validate
-# )
+
+def train_model_plot_and_save(model, dataset_train, dataset_validate, epochs=10):
+
+
+    dataset = tf.data.experimental.load("pickled_real_world_dataset.dat")
+    dataset = dataset.shuffle(24000)
+
+    dataset_train = dataset.take(21600)
+    dataset_validate = dataset.skip(21600)
+
+    dataset_train = dataset_train.cache()
+    dataset_train = dataset_train.shuffle(21600)
+    dataset_train = dataset_train.batch(32)
+
+    dataset_validate = dataset_validate.cache()
+    dataset_validate = dataset_validate.batch(32)
+
+
+    history = model.fit(
+        dataset_train,
+        epochs=epochs,
+        validation_data=dataset_validate
+    )
+
+    plt.plot(history.history["loss"], label="loss")
+    plt.plot(history.history["val_loss"], label="val_loss")
+    plt.legend()
+    plt.savefig("history1_retrain_dropout_Gnoise_real_world.png")
+    plt.close()
+
+    plt.plot(history.history["accuracy"], label="accuracy")
+    plt.plot(history.history["val_accuracy"], label="val_accuracy")
+    plt.legend()
+    plt.savefig("history2_retrain_dropout_Gnoise_real_world.png")
+    plt.close()
+
+    tf.keras.models.save_model(model, 'real_world_retrained_gnoise_dropout.model')
