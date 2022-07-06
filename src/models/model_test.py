@@ -1,4 +1,6 @@
 import tensorflow as tf
+import os
+import glob
 
 
 def test_model(model):
@@ -6,6 +8,8 @@ def test_model(model):
 
 
 def test_all_trained_models():
-    pass
+
+    for model in glob.glob(os.path.join()):
+        pass
 
 
