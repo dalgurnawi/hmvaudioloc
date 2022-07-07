@@ -1,0 +1,9 @@
+tensorflow
+tensorflow_io
+
+matplotlib
+
+requests
+pydub
+
+tqdm
