@@ -18,6 +18,8 @@ from src.models.model_architectures.model_paper_code_9 import create_paper_code_
 from src.models.model_architectures.model_paper_code_10 import create_paper_code_10_model
 from src.models.model_architectures.model_paper_code_11 import create_paper_code_11_model
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 
 def compile_model(model_choice="baseline_model", optimizer="adam", loss="sparse_categorical_crossentropy", metrics="accuracy"):
 

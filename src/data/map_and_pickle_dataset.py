@@ -5,6 +5,7 @@ from tqdm import tqdm
 import os
 
 tf.compat.v1.enable_eager_execution()
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 def process(audio):

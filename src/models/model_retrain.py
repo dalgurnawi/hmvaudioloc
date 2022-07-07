@@ -4,6 +4,8 @@ import os
 
 from src.data.read_pickled_dataset import read_pickled_dataset
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 
 def retrain_model(pickled_model_relative_path, pickled_dataset_relative_path, dataset_size, validation_split=0.2, batch_size=32, epochs=10, plot=True, save=True):
     dirname = os.path.dirname(__file__)

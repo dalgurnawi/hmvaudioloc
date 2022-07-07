@@ -1,6 +1,8 @@
 import tensorflow as tf
 import os
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 
 def read_pickled_dataset(pickled_dataset_relative_path, dataset_size, validation_split=0.2, batch_size=32):
     dirname = os.path.dirname(__file__)

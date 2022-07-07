@@ -2,6 +2,8 @@ import tensorflow as tf
 import os
 import glob
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 
 def read_test_dataset():
     pass
