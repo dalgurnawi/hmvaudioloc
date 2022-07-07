@@ -1,24 +1,19 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import os
 
-def reatrain_model(model_name, dataset_name, epochs=10):
-
-
-    dataset = tf.data.experimental.load("pickled_real_world_dataset.dat")
-    dataset = dataset.shuffle(24000)
-
-    dataset_train = dataset.take(21600)
-    dataset_validate = dataset.skip(21600)
-
-    dataset_train = dataset_train.cache()
-    dataset_train = dataset_train.shuffle(21600)
-    dataset_train = dataset_train.batch(32)
-
-    dataset_validate = dataset_validate.cache()
-    dataset_validate = dataset_validate.batch(32)
+from src.data.read_pickled_dataset import read_pickled_dataset
 
 
-    reconstructed_model = tf.keras.models.load_model('gaussian_noise_dropout.model')
+def retrain_model(pickled_model_relative_path, pickled_dataset_relative_path, dataset_size, validation_split=0.2, batch_size=32, epochs=10, plot=True, save=True):
+    dirname = os.path.dirname(__file__)
+
+    (dataset_train, dataset_validate) = read_pickled_dataset(pickled_dataset_relative_path,
+                                                             dataset_size,
+                                                             validation_split=validation_split,
+                                                             batch_size=batch_size)
+
+    reconstructed_model = tf.keras.models.load_model(os.path.join(dirname, pickled_model_relative_path))
 
     history = reconstructed_model.fit(
         dataset_train,
@@ -26,17 +21,49 @@ def reatrain_model(model_name, dataset_name, epochs=10):
         validation_data=dataset_validate
     )
 
-    plt.plot(history.history["loss"], label="loss")
-    plt.plot(history.history["val_loss"], label="val_loss")
-    plt.legend()
-    plt.savefig("history1_retrain_dropout_Gnoise_real_world.png")
-    plt.close()
+    if plot:
+        plt.plot(history.history["loss"], label="loss")
+        plt.plot(history.history["val_loss"], label="val_loss")
+        plt.legend()
+        plt.savefig(
+            os.path.join(
+                dirname,
+                f"../../data/plots/{pickled_model_relative_path.split('/')[-1]}_{pickled_dataset_relative_path.split('/')[-1]}_loss_epochs{epochs}.png"))
+        plt.close()
 
-    plt.plot(history.history["accuracy"], label="accuracy")
-    plt.plot(history.history["val_accuracy"], label="val_accuracy")
-    plt.legend()
-    plt.savefig("history2_retrain_dropout_Gnoise_real_world.png")
-    plt.close()
+        plt.plot(history.history["accuracy"], label="accuracy")
+        plt.plot(history.history["val_accuracy"], label="val_accuracy")
+        plt.legend()
+        plt.savefig(
+            os.path.join(
+                dirname,
+                f"../../data/plots/{pickled_model_relative_path.split('/')[-1]}_{pickled_dataset_relative_path.split('/')[-1]}_accuracy_epochs{epochs}.png"))
+        plt.close()
 
-    tf.keras.models.save_model(reconstructed_model, 'real_world_retrained_gnoise_dropout.model')
+    if save:
+        init_model_save_path = os.path.join(dirname, f"retrained_{pickled_model_relative_path.split('/')[-1]}_{pickled_dataset_relative_path.split('/')[-1]}_epochs{epochs}.model")
+        if not os.path.exists(init_model_save_path):
+            tf.keras.models.save_model(reconstructed_model, init_model_save_path)
+        else:
+            while os.path.exists(init_model_save_path):
+                init_model_save_path += ".redo"
+            tf.keras.models.save_model(reconstructed_model, init_model_save_path)
 
+
+def retrain_all_models():
+    """
+    this could work with different suffixes added per dataset
+    .aug_mnist_e10 (e for epochs)
+    .rl_mnist_e10
+    .rl_complex_e10
+    filenames could become unbearable at some point so this should be considered
+
+    timestamp in suffix would make this superlong.. and xomplicated to read. but very specific
+    test models not older than 24h for example
+
+    this could be done in original retrain function, no changing of the original model name, just adding suffixes
+    hmmm....
+
+    :return:
+    """
+    pass

@@ -10,7 +10,7 @@ def concat_waves():
     file_list = []
     duration_list = []
     file_name_list = glob.glob("recordings/*.wav")
-    for audio_file in file_name_list:
+    for audio_file in tqdm(file_name_list):
         sound = AudioSegment.from_wav(audio_file)
         duration_list.append((len(sound)))
         file_list.append(sound)
