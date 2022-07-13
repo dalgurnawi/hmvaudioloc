@@ -18,6 +18,8 @@ from src.models.model_architectures.model_paper_code_9 import create_paper_code_
 from src.models.model_architectures.model_paper_code_10 import create_paper_code_10_model
 from src.models.model_architectures.model_paper_code_11 import create_paper_code_11_model
 
+
+from src.models.model_architectures.model_YAMNet_CREPE_hybrid import create_yamnet_crepe_model
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
@@ -53,8 +55,8 @@ def compile_model(model_choice="baseline_model", optimizer="adam", loss="sparse_
     elif model_choice == "model_paper_code_11":
         model = create_paper_code_11_model()
 
-    # elif model_choice == "yamnet-crepe":
-    #     mdoel = create_yamnet_crepe_model()
+    elif model_choice == "yamnet-crepe":
+        model = create_yamnet_crepe_model()
 
     else:
         raise Exception("Model chosen does not exist in available model architectures")
