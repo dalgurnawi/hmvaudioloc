@@ -4,7 +4,6 @@
 Matplotlib and NumPy have to be installed.
 
 """
-import argparse
 import queue
 import sys
 
