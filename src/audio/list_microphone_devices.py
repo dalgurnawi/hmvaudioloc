@@ -8,4 +8,3 @@ def list_microphone_devices():
     """
 
     print(sd.query_devices())
-

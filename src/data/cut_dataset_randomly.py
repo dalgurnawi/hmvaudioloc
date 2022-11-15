@@ -21,10 +21,8 @@ for input_file_name in tqdm(input_file_name_list):
     counter = 0
     suffix = input_file_name.split('/')[-1][:-4]
     a = AudioSegment.from_wav(input_file_name)
-    print(len(a))
     max_samples = len(a) / min_sample_length
     if max_samples < 0:
-        print("the file is toooOOOOOO short")
         max_samples = 1
         max_sample_length = min_sample_length
 
