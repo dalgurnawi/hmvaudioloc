@@ -20,6 +20,9 @@ from src.models.model_architectures.model_paper_code_11 import create_paper_code
 
 
 from src.models.model_architectures.model_YAMNet_CREPE_hybrid import create_yamnet_crepe_model
+
+from src.visualisation.plot_training import plot_single_training
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
@@ -88,23 +91,7 @@ def train_model_plot_and_save(dataset_train, dataset_validate, model_choice="bas
     dirname = os.path.dirname(__file__)
 
     if plot:
-        plt.plot(history.history["loss"], label="loss")
-        plt.plot(history.history["val_loss"], label="val_loss")
-        plt.legend()
-        plt.savefig(
-            os.path.join(
-                dirname,
-                f"../../data/plots/{model_choice}_loss_epochs{epochs}.png"))
-        plt.close()
-
-        plt.plot(history.history["accuracy"], label="accuracy")
-        plt.plot(history.history["val_accuracy"], label="val_accuracy")
-        plt.legend()
-        plt.savefig(
-            os.path.join(
-                dirname,
-                f"../../data/plots/{model_choice}_accuracy_epochs{epochs}.png"))
-        plt.close()
+        plot_single_training(history, model_choice, epochs)
 
     if save:
         tf.keras.models.save_model(model, os.path.join(dirname, f"../../data/pickled_models/{model_choice}_epochs{epochs}.model"))

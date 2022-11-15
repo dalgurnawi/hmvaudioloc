@@ -7,3 +7,5 @@ requests
 pydub
 
 tqdm
+
+gdown
